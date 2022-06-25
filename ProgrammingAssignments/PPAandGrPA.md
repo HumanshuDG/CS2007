@@ -1,4 +1,5 @@
-# Week - 0
+<H1 ALIGN=CENTER> Week - 0 </H1>
+
 ### PPA - 1
 > Accept a positive integer $n$ as argument and print a NumPy array of zeros to the console.
 ```
@@ -34,7 +35,8 @@ def predict(w, x):
     return -1
 ```
 
-# Week - 1
+<H1 ALIGN=CENTER> Week - 1 </H1>
+
 ### PPA - 1
 > A
 ```
@@ -72,7 +74,8 @@ def predict(w, x):
 ```
 
 
-# Week - 2
+<H1 ALIGN=CENTER> Week - 2 </H1>
+
 ### PPA - 1
 > A
 ```
@@ -110,7 +113,8 @@ def predict(w, x):
 ```
 
 
-# Week - 3
+<H1 ALIGN=CENTER> Week - 3 </H1>
+
 ### PPA - 1
 > A
 ```
@@ -142,7 +146,8 @@ def predict(w, x):
 ```
 
 
-# Week - 4
+<H1 ALIGN=CENTER> Week - 4 </H1>
+
 ### PPA - 1
 > A
 ```
