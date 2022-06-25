@@ -29,8 +29,7 @@ and $−1$ if $w^{T}$ $x < 0$ T. This value is called the label. Don't worry abo
 ```
 import numpy as np
 def predict(w, x):
-    pred = np.sum(np.transpose(w) * x)
-    if pred >= 0:
+    if np.sum(np.transpose(w) * x) >= 0:
         return 1
     return -1
 ```
