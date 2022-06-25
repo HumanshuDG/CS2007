@@ -82,33 +82,69 @@ def ConfusionMatrix(y_hat, y):
 ```
 
 ### Mock - 4
-> A
+> Write a function `percep_loss(X, w, y)` to compute the perceptron loss for all the sample in $X$ and return the loss for individual samples in a vector.
 ```
-
+import numpy as np
+def percep_loss(x, w, y):
+    y_hat = np.where(x @ w >= 0, 1, -1)
+    return np.maximum(-1 * y_hat * y, np.zeros(y.shape[0]))
 ```
 
 ### Mock - 5
-> A
+> Shreya wants to build a linear regression model for predicting income of a person based on years of education a person has and years of experience he has in ML field. She collects data of 1000 ML professionals. She builds a linear regression model from scratch using numpy. She starts with a base model given by: <BR>
+> $income = 60000 + 150 \times (years of education) + 250 \times (years of experience)$ <BR>
+> She uses gradient descent for optimization of her model for two iterations with learning rate (0.1). <BR>
+> Write a function `add_dummy(X)` to add dummy feature as first column to feature matrix $X$.
 ```
-
+import numpy as np
+def add_dummy(X):
+    return np.column_stack((np.ones(X.shape[0]), X))
 ```
 
 ### Mock - 6
-> A
+> Shreya wants to build a linear regression model for predicting income of a person based on years of education a person has and years of experience he has in ML field. She collects data of 1000 ML professionals. She builds a linear regression model from scratch using numpy. <BR>
+> She starts with a base model given by: <BR>
+> $income = 60000 + 150 \times (years of education) + 250 \times (years of experience)$ <BR>
+> She uses gradient descent for optimization of her model for two iterations with learning rate (0.1). <BR>
+> Write a function `predict(X, w)` to get linear combination of Feature matrix $X$ and weight vector $w$. <BR>
+> ***Consider X does not have dummy feature.***
 ```
-
+import numpy as np
+def predict(X, w):
+    if np.column_stack((np.ones(X.shape[0]), X)).shape[1] == w.shape[0]:
+        return np.column_stack((np.ones(X.shape[0]), X)) @ w
+    return None
 ```
 
 ### Mock - 7
-> A
+> Shreya wants to build a linear regression model for predicting income of a person based on years of education a person has and years of experience he has in ML field. She collects data of 1000 ML professionals. She builds a linear regression model from scratch using numpy. <BR>
+She starts with a base model given by: <BR>
+> **$income = 60000 + 150 \times (years of education) + 250 \times (years of experience)$** <BR>
+> She uses gradient descent for optimization of her model for two iterations with learning rate (0.1).
+> Write a function `loss(X, w, y)` which takes feature matrix($X$), weight vector($w$) and output label vector($y$) and returns sum squared loss while implementing regression model. <BR>
+**Note: Do necessary preprocessing of $X$**
 ```
-
+import numpy as np
+def loss(X, w, y):
+    X = np.column_stack((np.ones(X.shape[0]), X))
+    if X.shape[1] == w.shape[0]:
+        return (X @ w - y).T@(X @ w - y)
+    return None
 ```
 
 ### Mock - 8
-> A
+> For a linear regression problem, write a function named `weight_update(X, w, y, lr)` to get updated weight after one iteration of gradient descent given that $X$ is the feature matrix, $w$ is the weight vector and $y$ is the output label vector. <BR>
+> &nbsp; <BR>
+> **Notes** <BR>
+> 1. Do necessary pre-processing for $X$.
+> 2. If the shapes of X and w are incompatible, the function should return `None`.
 ```
-
+import numpy as np
+def weight_update(X, w, y, lr):
+    X = np.column_stack((np.ones(X.shape[0]), X))
+    if X.shape[1] == w.shape[0]:
+        return w - lr * X.T @ (X @ w - y)
+    return None
 ```
 
 ### Mock - 9
