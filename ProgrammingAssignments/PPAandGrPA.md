@@ -197,33 +197,79 @@ def weight_update(X, w, y, lr):
 <H1 ALIGN=CENTER> Week - 3 </H1>
 
 ### PPA - 1
-> A
+> Consider input feature vector $X$. The shape of $X$ is fixed ($1 x\times 3$) and the degree of the polynomial is a random number (between 2 to 10). <BR>
+> Write a function named `polynomial_transform` which takes the feature vector and degree of the polynomial as inputs and returns the transformed polynomial feature as output as a numpy array.
 ```
-
+import numpy as np
+import random
+import itertools
+import functools
+def polynomial_transform(x, degree):
+	f = np.ones(len(x))
+	for i in range(1, degree - 1):
+		f.append()
 ```
 
 ### PPA - 2
-> A
+> Consider input feature matrix $X$, label $y$ and weight $w$. The size of $X$, $y$ and $w$ are fixed to ($10 \times 3$), ($10 \times 1$) and ($4 \times 1$). <BR>
+> Write a loss function named `ridge_loss` to compute ridge regression loss. This function should take the feature matrix ($X$), label vector ($y$), weight vector($w$) and regularization rate ($l$) as inputs and return the loss value as output. <BR>
+**Note: Add a dummy feature to $X$.**
 ```
 
 ```
 
 ### GrPA - 1
-> A
+> Government of India is taking several steps to ensure that we are well prepared to face the challenges and threats posed by COVID-19. With active support of citizens of India, Goverment have been able to mitigate the spread of the virus so far. One of the most important factors in the fight with the virus is to vaccinate maximum people and enable them to take precautions as per the advisories being issued by different Ministries. <BR>
+> Total 50 month's data and total vaccination in each month is given. <BR>
+> After initial data exploration you got to know that the given data don't follow linear model. <BR>
+> Now You have to define function `model_error` which will fit the given data on linear regression model with appropriate degree and return RMSE error.
 ```
-
+import numpy as np
+import random
+from sklearn.linear_model import LinearRegression
+def model_error(X, y,degree):
+	transformed_features = polynomial_transform(X, degree)
+	polyreg = LinearRegression()
+	w_nonlin = polyreg.fit(transformed_features, y)
+	y_pred = w_nonlin.predict(polynomial_transform(X, degree))
+	training_error = y_pred - y
+	train_loss = (1 / 2) * (np.transpose(training_error) @ training_error) 
+	rmse = np.sqrt((2 / X.shape[0]) * train_loss)
+	return rmse
 ```
 
 ### GrPA - 2
-> A
+> Consider input feature matrix $X$ having size of ($20 \times 3$).
+> **You do not have to generate these values.**
+> Write a function named `additional_vector` which will creates a list of size $20$ having $1$ at even place and $0$ at odd place (e.g - `[0, 1, 0, 1]). Then later it returns new updated matrix by stacking $X$ and new vector columnwise.
 ```
-
+import numpy as np
+import random
+def additional_vector(X):
+	dummy=[]
+	for i in range(len(X)):
+		if i % 2 == 0:
+			dummy.append(0)
+	else:
+		dummy.append(1)
+	updated_X = np.column_stack((X, dummy))
+	return updated_X
 ```
 
 ### GrPA - 3
-> A
+> Consider input feature matrix $X$, label $y$ and weight $w$. The size of $X$, $y$ and $w$ are fixed to ($20 \times 3$), ($20 \times 1$) and ($3 \times 1$) respectively and these will have random values. <BR>
+> **You do not have to generate these values.** <BR>
+> Write a function named `mean_abs` to compute mean absolute error. This function should take the feature matrix, label vector, weight vector as inputs and return the mean absolute value as output.
 ```
-
+import numpy as np
+import random
+def mean_abs(X, y, w):
+	predicted_y = X @ w
+	error = y - predicted_y
+	abs_error = abs(error)
+	mean_matrix = (1 / len(X)) * (abs_error)
+	mean_sum = np.sum(np.sum(mean_matrix, axis = 1))
+	return mean_sum
 ```
 
 
