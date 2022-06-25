@@ -40,7 +40,7 @@ def predict(w, x):
 ### PPA - 1
 > Write a function named `vec_addition(u, v)` which takes two vectors $u$ and $v$ as input and returns their vector addition. <BR>
 > **Inputs:** $u$ and $v$ are two numerical numpy arrays. <BR>
-> **Output:** a vector representing sum of $u$ and $v$, if they have consistent shapes, $None$ otherwise.
+> **Output:** a vector representing sum of $u$ and $v$, if they have consistent shapes, `None` otherwise.
 ```
 import numpy as np
 file = open("test.py", 'w')
@@ -64,7 +64,7 @@ def scalar_multiply(u, k):
 > Write a function `hadamard(u, v)` which takes two vectors $u$ and $v$ as input and returns hadamard product of $u$ and $v$. <BR>
 > Hadamard product is obtained via multiplying two matrices/vectors elementwise. <BR>
 > **Inputs:** Two vectors $u$ and $v$. <BR>
-> **Output:** Hadamard product of $u$ and $v$ if the dimensions of $u$ and $v$ are consistent, otherwise $None$.
+> **Output:** Hadamard product of $u$ and $v$ if the dimensions of $u$ and $v$ are consistent, otherwise `None`.
 ```
 import numpy as np
 def hadamard(u, v):
@@ -76,7 +76,7 @@ def hadamard(u, v):
 ### GrPA - 1
 > Write a function `dot_product(u, v)` which take two vectors $u$ and $v$ as input and returns inner product of $u$ and $v$ as output. <BR>
 > **Inputs:** vectors $u$ and $v$. <BR>
-> **Output:** dot product of $u$ and $v$ if $u$ and $v$ have consistent dimension otherwise $None$.
+> **Output:** dot product of $u$ and $v$ if $u$ and $v$ have consistent dimension otherwise `None`.
 ```
 import numpy as np
 def dot_product(u, v):
@@ -98,7 +98,7 @@ def add_constant(u, v):
 ### GrPA - 3
 > Write a function `add_matrix(X, Y)` to add two matrices $X$ and $Y$. <BR>
 > **Inputs:** $X$ is a matrix, $Y$ is a matrix. <BR>
-> **Output:** $Z$ is a matrix representing ($X + Y$) if $X$ and $Y$ have consistent dimension otherwise $None$.
+> **Output:** $Z$ is a matrix representing ($X + Y$) if $X$ and $Y$ have consistent dimension otherwise `None`.
 ```
 import numpy as np
 def add_matrix(X, Y):
@@ -123,7 +123,7 @@ def add_one(X):
 ### PPA - 2
 > Write a function `multiply(X, w)` to Multiply feature matrix($X$) and weight vector($w$) after addition of dummy feature to feature matrix. <BR>
 > **Inputs:** Feature matrix $X$ and weight vector $w$. <BR>
-> **Output:** Product of $X$ and $w$ after adding dummy feature to feature matrix $X$. If the dimensions are not consistent return $None$.
+> **Output:** Product of $X$ and $w$ after adding dummy feature to feature matrix $X$. If the dimensions are not consistent return `None`.
 ```
 import numpy as np
 def multiply(X, w):
@@ -137,7 +137,7 @@ def multiply(X, w):
 > Write a function `loss(X, w, y)` which takes feature matrix($X$), weight vector($w$) and output label vector($y$) and returns sum squared loss while implementing regression model. <BR>
 > ***Note: Do necessary preprocessing of $X$*** <BR>
 > **Inputs:** Feature matrix $X$ and weight vector $w$ and output label vector $y$. <BR>
-> **Output:** sum squared loss if dimensions of inputs are consistent, otherwise $None$.
+> **Output:** sum squared loss if dimensions of inputs are consistent, otherwise `None`.
 ```
 import numpy as np
 def loss(X, w, y):
@@ -153,7 +153,7 @@ def loss(X, w, y):
 ### GrPA - 1
 > Write a function `compatibility(X, w)` to find whether $X$ and $w$ can be multiplied or not. <BR>
 > **Inputs:** Feature matrix $X$ and weight vector $w$ <BR>
-> **Output:** return `C` if $X$ and $w$ can be multiplied otherwise $None$. <BR>
+> **Output:** return `C` if $X$ and $w$ can be multiplied otherwise `None`. <BR>
 > **Note: Preprocess $X$, if necessary.**
 ```
 import numpy as np
@@ -166,7 +166,7 @@ def compatibility(X, w):
 ### GrPA - 2
 > Write a function `gradient(X, w, y)` to calculate gradient of loss function w.r.t weight vector given that $X$ is the feature matrix, $w$ is the weight vector and $y$ is the output vector. <BR>
 > **Inputs:** Feature matrix $X$, weight vector $w$, and output label vector $y$. <BR>
-> **Output:** gradient if dimesnsions of inputs are consistent, otherwise $None$. <BR>
+> **Output:** gradient if dimesnsions of inputs are consistent, otherwise `None`. <BR>
 > **Note: Preprocess $X$, if necessary.**
 ```
 import numpy as np
@@ -181,7 +181,7 @@ def gradient(X, w, y):
 ### GrPA - 3
 > Write a function `weight_update(X, w, y, lr)` to get updated weight after one iteration of gradient descent given that $X$ is the feature matrix, $w$ is the weight vector and $y$ is the output label vector. <BR>
 > **Inputs:** Feature matrix $X$, weight vector $w$, output label vector $y$ and learning rate $lr$. <BR>
-> **Output:** weight updates after gradient calculation if dimensions of inputs are consistent, otherwise $None$. <BR>
+> **Output:** weight updates after gradient calculation if dimensions of inputs are consistent, otherwise `None`. <BR>
 > **Note: Do necessary preprocessing of $X$.**
 ```
 import numpy as np
@@ -243,8 +243,8 @@ def model_error(X, y,degree):
 ```
 
 ### GrPA - 2
-> Consider input feature matrix $X$ having size of ($20 \times 3$).
-> **You do not have to generate these values.**
+> Consider input feature matrix $X$ having size of ($20 \times 3$). <BR>
+> **You do not have to generate these values.** <BR>
 > Write a function named `additional_vector` which will creates a list of size $20$ having $1$ at even place and $0$ at odd place (e.g - `[0, 1, 0, 1]). Then later it returns new updated matrix by stacking $X$ and new vector columnwise.
 ```
 import numpy as np
