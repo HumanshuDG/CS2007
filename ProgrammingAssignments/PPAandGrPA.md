@@ -215,7 +215,11 @@ def polynomial_transform(x, degree):
 > Write a loss function named `ridge_loss` to compute ridge regression loss. This function should take the feature matrix ($X$), label vector ($y$), weight vector($w$) and regularization rate ($l$) as inputs and return the loss value as output. <BR>
 **Note: Add a dummy feature to $X$.**
 ```
-
+import numpy as np
+import random
+def ridge_loss(X, y, w, l):
+	X = np.column_stack((np.ones(X.shape[0]), X))
+	return (0.5 * ((y - (X @ w)).T @ (y - (X @ w)))) + ((1 / 2) * (w.T @ w))
 ```
 
 ### GrPA - 1
@@ -276,7 +280,10 @@ def mean_abs(X, y, w):
 <H1 ALIGN=CENTER> Week - 4 </H1>
 
 ### PPA - 1
-> A
+> Define a function `ConfusionMatrix(y, y_hat)` for binary classification and return a matrix in the following format: <BR>
+> `[[TN,FP],[FN,TP]]` <BR>
+> **Inputs:** `y`: ($1 \times n$), `y_hat`: ($1 \times n$). <BR>
+> **Output:** 2D numpy array.
 ```
 
 ```
