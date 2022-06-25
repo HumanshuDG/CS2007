@@ -112,7 +112,11 @@ def ConfusionMatrix(y_hat, y):
 ```
 
 ### Mock - 9
-> A
+> Define a function `is_binary(y)` to check whether the label vector y belongs to binary classification or not. <BR>
+> If the labels are binary then return True (i.e., state = True (Boolean))  else return False (i.e., state = False). <BR>
+> All elements in y are integer numbers (not the datatype). 
 ```
-
+import numpy as np
+def is_binary(y):
+    return len(np.unique(y)) == 2
 ```
