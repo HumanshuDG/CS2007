@@ -12,7 +12,7 @@ print(np.zeros(int(input())))
 ```
 import numpy as np
 def mean(X):
-    return X.mean(axis = 0)
+	return X.mean(axis = 0)
 ```
 
 ### PPA - 3
@@ -21,7 +21,7 @@ $XW + b$
 ```
 import numpy as np
 def compute(X, W, b):
-    return (X @ W) + b
+	return (X @ W) + b
 ```
 
 ### PPA - 4
