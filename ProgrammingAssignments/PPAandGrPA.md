@@ -3,9 +3,7 @@
 > Accept a positive integer $n$ as argument and print a NumPy array of zeros to the console.
 ```
 import numpy as np
-n = int(input())
-a = np.zeros(n)
-print(a)
+print(np.zeros(int(input())))
 ```
 
 ### PPA - 2
