@@ -111,8 +111,8 @@ def add_matrix(X, Y):
 <H1 ALIGN=CENTER> Week - 2 </H1>
 
 ### PPA - 1
-> Write a function add_one(X) to include first column with all elements 1 in X.
-> **Inputs:** A matrix $X$.
+> Write a function add_one(X) to include first column with all elements 1 in X. <BR>
+> **Inputs:** A matrix $X$. <BR>
 > **Output:** updated matrix with a column having elements 1 added as first column to $X$.
 ```
 import numpy as np
@@ -121,21 +121,48 @@ def add_one(X):
 ```
 
 ### PPA - 2
-> A
+> Write a function `multiply(X, w)` to Multiply feature matrix($X$) and weight vector($w$) after addition of dummy feature to feature matrix. <BR>
+> **Inputs:** Feature matrix $X$ and weight vector $w$. <BR>
+> **Output:** Product of $X$ and $w$ after adding dummy feature to feature matrix $X$. If the dimensions are not consistent return $None$.
 ```
-
+import numpy as np
+def multiply(X, w):
+	a = np.column_stack((np.ones(X.shape[0]), X))
+	if a.shape[-1] != w.shape[0]:
+		return None
+	return a @ w
 ```
 
 ### PPA - 3
-> A
+> Write a function `loss(X, w, y)` which takes feature matrix($X$), weight vector($w$) and output label vector($y$) and returns sum squared loss while implementing regression model. <BR>
+> ***Note: Do necessary preprocessing of $X$*** <BR>
+> **Inputs:** Feature matrix $X$ and weight vector $w$ and output label vector $y$. <BR>
+> **Output:** sum squared loss if dimensions of inputs are consistent, otherwise $None$.
 ```
-
+import numpy as np
+def loss(X, w, y):
+	a = np.column_stack((np.ones(X.shape[0]), X))
+	if a.shape[-1] != w.shape[0]:
+		return None
+	f = a @ w
+	e = f - y
+	l = 0.5 * (np.transpose(e) @ e)
+	return l
 ```
 
 ### GrPA - 1
-> A
-```
+> Write a function compatibility(X,w) to find whether X and w can be multiplied or not. <BR>
+> **Inputs:** Feature matrix $X$ and weight vector $w$ <BR>
+> **Output:** return `C` if $X$ and $w$ can be multiplied otherwise $None$. <BR>
 
+> ***Note: Preprocess $X$, if necessary.***
+
+```
+import numpy as np
+def compatibility(X, w):
+	if (X.shape[-1] + 1) == w.shape[0]:
+		return "C"
+	return None
 ```
 
 ### GrPA - 2
