@@ -1,10 +1,10 @@
 # Mock OPE - I
 ### Mock - 1
->	You are provided with an input feature matrix $X$, label $y$ and weight $w$. <BR>
-	The size of $X$, $y$ and $w$ are fixed to `(100 x 5)`, `(100 x 1)` and `(6 x 1)`. <BR>
-	You have to add a dummy feature to X. <BR>
-	Write a loss function named `loss` to compute ridge and lasso regression losses for the given data. <BR>
-	This function should take the feature matrix, label vector, weight vector and regularization rate as inputs and return the minimum of two loss values as output.
+> You are provided with an input feature matrix $X$, label $y$ and weight $w$. <BR>
+> size of $X$, $y$ and $w$ are fixed to `(100 x 5)`, `(100 x 1)` and `(6 x 1)`. <BR>
+> have to add a dummy feature to X. <BR>
+> a loss function named `loss` to compute ridge and lasso regression losses for the given data. <BR>
+> function should take the feature matrix, label vector, weight vector and regularization rate as inputs and return the minimum of two loss values as output.
 ```
 import numpy as np
 import random
@@ -21,7 +21,7 @@ def loss(X, y, w, lr):
 > - You are provided with x (age of the fish), y (length of the fish) and test (age for which length is unknown). x and y are numpy arrays of shape 78 x 1 and test is a numpy array of size 1 X 1.
 > - You have to apply second degree polynomial transformation on x.
 > - Using only numpy, implement a linear regression model by stochastic gradient descent procedure on the transformed data with 300 iterations, initial weights as zero and learning rate as 0.001. <BR>
-	
+
 > What is the length of a test bluegill fish that is randomly selected based on its age? <BR>
 > - Define a function named `output` which accepts $x$, $y$, test as inputs and returns new predicted length (float) as output.
 ```
@@ -58,10 +58,9 @@ def output(x, y, test):
 ```
 
 ### Mock - 3
-> Define a function `ConfusionMatrix(y, y_hat)` for binary classification and return a matrix in the following format: <BR>
-> `[[TN, FP], [FN, TP]]`
-> - Inputs:  `y`: ($1 \times n$), `y_hat`: ($1 \times n$)
-> - Output: 2D NumPy array.
+> Define a function `ConfusionMatrix(y, y_hat)` for binary classification and return a matrix in the following format: `[[TN, FP], [FN, TP]]` <BR>
+> **Inputs:**  `y`: ($1 \times n$), `y_hat`: ($1 \times n$)
+> **Output:** 2D NumPy array.
 ```
 import numpy as np
 def ConfusionMatrix(y_hat, y):
@@ -134,10 +133,8 @@ def loss(X, w, y):
 
 ### Mock - 8
 > For a linear regression problem, write a function named `weight_update(X, w, y, lr)` to get updated weight after one iteration of gradient descent given that $X$ is the feature matrix, $w$ is the weight vector and $y$ is the output label vector. <BR>
-> &nbsp; <BR>
-> **Notes** <BR>
-> 1. Do necessary pre-processing for $X$.
-> 2. If the shapes of X and w are incompatible, the function should return `None`.
+> If the shapes of $X$ and $w$ are incompatible, the function should return `None`. <BR>
+> **Do necessary pre-processing for $X$.**
 ```
 import numpy as np
 def weight_update(X, w, y, lr):
