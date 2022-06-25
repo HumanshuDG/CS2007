@@ -151,12 +151,10 @@ def loss(X, w, y):
 ```
 
 ### GrPA - 1
-> Write a function compatibility(X,w) to find whether X and w can be multiplied or not. <BR>
+> Write a function `compatibility(X, w)` to find whether $X$ and $w$ can be multiplied or not. <BR>
 > **Inputs:** Feature matrix $X$ and weight vector $w$ <BR>
 > **Output:** return `C` if $X$ and $w$ can be multiplied otherwise $None$. <BR>
-
-> ***Note: Preprocess $X$, if necessary.***
-
+> **Note: Preprocess $X$, if necessary.**
 ```
 import numpy as np
 def compatibility(X, w):
@@ -166,17 +164,35 @@ def compatibility(X, w):
 ```
 
 ### GrPA - 2
-> A
+> Write a function `gradient(X, w, y)` to calculate gradient of loss function w.r.t weight vector given that $X$ is the feature matrix, $w$ is the weight vector and $y$ is the output vector. <BR>
+> **Inputs:** Feature matrix $X$, weight vector $w$, and output label vector $y$. <BR>
+> **Output:** gradient if dimesnsions of inputs are consistent, otherwise $None$. <BR>
+> **Note: Preprocess $X$, if necessary.**
 ```
-
+import numpy as np
+def gradient(X, w, y):
+	X = np.column_stack((np.ones(X.shape[0]), X))
+	if X.shape[-1] == w.shape[0]:
+		b = X @ w - y
+		return(X.T @ b)
+	return None
 ```
 
 ### GrPA - 3
-> A
+> Write a function `weight_update(X, w, y, lr)` to get updated weight after one iteration of gradient descent given that $X$ is the feature matrix, $w$ is the weight vector and $y$ is the output label vector. <BR>
+> **Inputs:** Feature matrix $X$, weight vector $w$, output label vector $y$ and learning rate $lr$. <BR>
+> **Output:** weight updates after gradient calculation if dimensions of inputs are consistent, otherwise $None$. <BR>
+> **Note: Do necessary preprocessing of $X$.**
 ```
-
+import numpy as np
+def weight_update(X, w, y, lr):
+	X = np.column_stack((np.ones(X.shape[0]), X))
+	if X.shape[-1] == w.shape[0]:
+		b = X @ w - y
+		grad = X.T @ b
+		return w - lr * grad
+	return None
 ```
-
 
 <H1 ALIGN=CENTER> Week - 3 </H1>
 
