@@ -17,9 +17,44 @@ def loss(X, y, w, lr):
 ```
 
 ### Mock - 2
-> A
+> Researchers Cook and Weisberg (1999) measured and recorded the age (in years) and length (in mm)  of some randomly sampled 'Bluegills' fishes from Lake Mary in Minnesota. They were primarily interested in learning how the length of a bluegill fish is related to its age. Their observation by plotting the length vs age suggests that there is positive trend in the data, however, it doesn't appear to be quite linear. It appears as if there is some kind of nonlinear relationship.
+> - You are provided with x (age of the fish), y (length of the fish) and test (age for which length is unknown). x and y are numpy arrays of shape 78 x 1 and test is a numpy array of size 1 X 1.
+> - You have to apply second degree polynomial transformation on x.
+> - Using only numpy, implement a linear regression model by stochastic gradient descent procedure on the transformed data with 300 iterations, initial weights as zero and learning rate as 0.001. <BR>
+	
+> What is the length of a test bluegill fish that is randomly selected based on its age? <BR>
+> - Define a function named `output` which accepts $x$, $y$, test as inputs and returns new predicted length (float) as output.
 ```
-
+import numpy as np
+import itertools
+import functools
+import random
+def combination(x, degree):
+    return itertools.combinations_with_replacement(x, degree)
+def feature(items):
+    return functools.reduce(lambda x, y: x * y, items)
+def polynomial_transform(x, degree):
+    if x.ndim == 1:
+        x = x[:, None]
+    x_t = x.T
+    dummy = [np.ones(x.shape[0])]
+    for i in range(1, degree + 1):
+        for j in combination(x_t, i):
+            dummy.append(feature(j))
+    return np.asarray(dummy).T
+def sgd(x, epoch, lr, y):
+    w = np.zeros(x.shape[1])
+    for i in range(epoch):
+        for j in range(x.shape[0]):
+            index = random.randint(0, x.shape[0] - 1)
+            x_ = x[index:index + 1]
+            y_ = y[index:index + 1]
+            w += -lr * x_.T @ (x_ @ w - y_)
+    return w
+def output(x, y, test):
+    X = polynomial_transform(x, 2)
+    W = sgd(X, 300, 0.001, y)
+    return polynomial_transform(test, 2) @ W
 ```
 
 ### Mock - 3
