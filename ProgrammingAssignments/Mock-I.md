@@ -11,7 +11,7 @@ import random
 def loss(X, y, w, lr):
     X = np.column_stack((np.ones(X.shape[0]), X))
     loss = X @ w - y
-    lasso = 0.5 * loss.T @ loss + 0.5 * lr * w.T @w
+    lasso = 0.5 * loss.T @ loss + 0.5 * lr * w.T @ w
     ridge = 0.5 * loss.T @ loss + 0.5 * lr * np.sum(np.abs(w))
     return min(lasso, ridge)
 ```
@@ -58,9 +58,27 @@ def output(x, y, test):
 ```
 
 ### Mock - 3
-> A
+> Define a function `ConfusionMatrix(y, y_hat)` for binary classification and return a matrix in the following format: <BR>
+> `[[TN, FP], [FN, TP]]`
+> - Inputs:  `y`: ($1 \times n$), `y_hat`: ($1 \times n$)
+> - Output: 2D NumPy array.
 ```
-
+import numpy as np
+def ConfusionMatrix(y_hat, y):
+    TN, FP, FN, TP = 0, 0, 0, 0
+    for i in range(y.shape[0]):
+        if y[i] == y_hat[i]:
+            if y[i] == 1:
+                TP += 1
+            else:
+                TN += 1
+        else:
+            if y[i] == 0 and y_hat[i] == 1:
+                FP += 1
+            else:
+                FN += 1
+    cm = [[TN, FP], [FN, TP]]
+    return cm
 ```
 
 ### Mock - 4
