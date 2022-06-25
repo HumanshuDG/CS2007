@@ -61,9 +61,9 @@ def scalar_multiply(u, k):
 ```
 
 ### PPA - 3
-> Write a function `hadamard(u, v)` which takes two vectors $u$ and $v$ as input and returns hadamard product of $u$ and $v$.
-> Hadamard product is obtained via multiplying two matrices/vectors elementwise.
-> **Inputs:** Two vectors $u$ and $v$.
+> Write a function `hadamard(u, v)` which takes two vectors $u$ and $v$ as input and returns hadamard product of $u$ and $v$. <BR>
+> Hadamard product is obtained via multiplying two matrices/vectors elementwise. <BR>
+> **Inputs:** Two vectors $u$ and $v$. <BR>
 > **Output:** Hadamard product of $u$ and $v$ if the dimensions of $u$ and $v$ are consistent, otherwise $None$.
 ```
 import numpy as np
@@ -74,30 +74,50 @@ def hadamard(u, v):
 ```
 
 ### GrPA - 1
-> A
+> Write a function `dot_product(u, v)` which take two vectors $u$ and $v$ as input and returns inner product of $u$ and $v$ as output. <BR>
+> **Inputs:** vectors $u$ and $v$. <BR>
+> **Output:** dot product of $u$ and $v$ if $u$ and $v$ have consistent dimension otherwise $None$.
 ```
-
+import numpy as np
+def dot_product(u, v):
+	if u.shape == v.shape:
+		return np.dot(u, v)
+	return None
 ```
 
 ### GrPA - 2
-> A
+> Write a function `add_constant(u, k)` which adds a constant $k$ to each element of $u$. <BR>
+> **Inputs:** $u$ is a vector, $k$ is a scalar. <BR>
+> **Output:** $C$ is a vector
 ```
-
+import numpy as np
+def add_constant(u, v):
+	return u + v
 ```
 
 ### GrPA - 3
-> A
+> Write a function `add_matrix(X, Y)` to add two matrices $X$ and $Y$. <BR>
+> **Inputs:** $X$ is a matrix, $Y$ is a matrix. <BR>
+> **Output:** $Z$ is a matrix representing ($X + Y$) if $X$ and $Y$ have consistent dimension otherwise $None$.
 ```
-
+import numpy as np
+def add_matrix(X, Y):
+    try:
+        return X + Y
+    except:
+        return None
 ```
-
 
 <H1 ALIGN=CENTER> Week - 2 </H1>
 
 ### PPA - 1
-> A
+> Write a function add_one(X) to include first column with all elements 1 in X.
+> **Inputs:** A matrix $X$.
+> **Output:** updated matrix with a column having elements 1 added as first column to $X$.
 ```
-
+import numpy as np
+def add_one(X):
+	return np.column_stack((np.ones(X.shape[0]), X))
 ```
 
 ### PPA - 2
