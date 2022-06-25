@@ -285,35 +285,76 @@ def mean_abs(X, y, w):
 > **Inputs:** `y`: ($1 \times n$), `y_hat`: ($1 \times n$). <BR>
 > **Output:** 2D numpy array.
 ```
-
+# ERROR IN PROGRAM SO JUST SUBMIT	
+import numpy as np
+def ConfusionMatrix(y, y_hat):
+    TP = np.where((y_hat == 1 and y == 1), 1, 0).sum()
+    TN = np.where((y_hat == 0 and y == 0), 1, 0).sum()
+    FN = np.where((y_hat == 0 and y == 1), 1, 0).sum()
+    FP = np.where((y_hat == 1 and y == 0), 1, 0).sum()
+    cm = [[TN, FP], [FN, TP]]
+    return cm
 ```
 
 ### PPA - 2
-> A
+> Define a function `is_binary(y)` to check whether the label vector $y$ belongs to binary classification or not. If the labels are binary then return `True` (i.e., state = True (Boolean)) else return `False` (i.e., state = False). <BR>
+> All elements in $y$ are integer numbers (not the datatype).
 ```
-
+import numpy as np
+def is_binary(y):
+	return np.where((len(np.unique(y)) == 2), True, False)
 ```
 
 ### PPA - 3
-> A
+> Write a function `percep_loss(X,w,y,i)` to compute the perceptron loss for all the sample in $X$ and return the loss for individual samples in a vector.
 ```
-
+import numpy as np
+def percep_loss(X, w, y):
+    y_hat = np.where((X @ w) >= 0, 1, -1)
+    samplewise_loss = (np.maximum(-1 * y_hat * y, np.zeros(y.shape[0])))
+    return samplewise_loss
 ```
 
 ### GrPA - 1
-> A
+> Write a function `OneHotEncode(y)` to convert integer labels to one hot-encoded labels.
 ```
-
+import numpy as np
+def OneHotEncode(y):
+	encoded = np.zeros((y.size, y.max() + 1))
+	encoded[np.arange(y.size), y] = 1.0
+	return encoded
 ```
 
 ### GrPA - 2
-> A
+> Implement the perceptron weight update rule. Name the function as `update(x, w, y, epoch)` to update the weight vector over $n$ epochs and returns the history of the weight updates as a matrix (or a vector if there is only one feature). <BR>
+> The row represents the weight values at $i^{th}$ epoch. The zeroth row represents the weight value at epoch zero (that is the one directly passed an argument to the function). <BR>
+> **Note: Keep learning rate alpha as 1.0**
 ```
-
+import numpy as np
+def update(x,w,y,epochs):
+	history = np.zeros((epochs+1,w.size))
+	for epoch in np.arange(epochs):
+		for xi, target in zip(x, y):
+			w += 1 * (target - np.where(xi @ w >= 0, 1, -1)) * xi
+		history[epoch + 1] = w
+	return history
 ```
 
 ### GrPA - 3
-> A
+> Implement a function with a name `is_linearly_separable()` that takes in data matrix with a dummy feature ($X$) and label vector ($y$). The function returns `True` if the datapoints are linearly separable, `False` otherwise. <BR>
+> **Note: The maximum number of epochs should not exceed 10.**
 ```
-
+import numpy as np
+def is_linearly_separable(x,y):
+	def loss(features, labels, weights):
+		e = np.where(features @ weights >= 0, 1, -1) - labels
+		return (e.transpose() @ e) 
+	w = np.zeros(x.shape[1])
+	state = False
+	for epoch in np.arange(epochs):
+		for xi, target in zip(x, y):
+			w += 0.5 * (target - np.where(xi @ w >= 0, 1, -1)) * xi
+		if loss(x, y, w) == 0.0:
+			state = True
+	return state
 ```
