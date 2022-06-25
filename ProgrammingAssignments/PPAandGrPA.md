@@ -26,11 +26,8 @@ def compute(X, W, b):
 ```
 
 ### PPA - 4
-> Write a function named `predict` that accepts two vectors $w$ and $x$ as arguments.
-> It should return the value $1$ if $w^{T}$ $x$ $\ge 0$ and $−1$ if $w^{T}$ $x < 0$ T. This value is called the label. Don't worry about what a label is now. It will become clear in week-4.
-
-$x^{T}$
-
+> Write a function named `predict` that accepts two vectors $w$ and $x$ as arguments. It should return the value $1$ if $w^{T} x \ge 0$ 
+and $−1$ if $w^{T}$ $x < 0$ T. This value is called the label. Don't worry about what a label is now. It will become clear in week-4.
 ```
 import numpy as np
 def predict(w, x):
