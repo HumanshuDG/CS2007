@@ -59,7 +59,7 @@ def output(x, y, test):
 
 ### Mock - 3
 > Define a function `ConfusionMatrix(y, y_hat)` for binary classification and return a matrix in the following format: `[[TN, FP], [FN, TP]]` <BR>
-> **Inputs:**  `y`: ($1 \times n$), `y_hat`: ($1 \times n$)
+> **Inputs:**  `y`: ($1 \times n$), `y_hat`: ($1 \times n$) <BR>
 > **Output:** 2D NumPy array.
 ```
 import numpy as np
