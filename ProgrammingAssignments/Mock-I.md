@@ -2,9 +2,9 @@
 ### Mock - 1
 > You are provided with an input feature matrix $X$, label $y$ and weight $w$. <BR>
 > size of $X$, $y$ and $w$ are fixed to `(100 x 5)`, `(100 x 1)` and `(6 x 1)`. <BR>
-> have to add a dummy feature to X. <BR>
-> a loss function named `loss` to compute ridge and lasso regression losses for the given data. <BR>
-> function should take the feature matrix, label vector, weight vector and regularization rate as inputs and return the minimum of two loss values as output.
+> You have to add a dummy feature to X. <BR>
+> Write a loss function named `loss` to compute ridge and lasso regression losses for the given data. <BR>
+> This function should take the feature matrix, label vector, weight vector and regularization rate as inputs and return the minimum of two loss values as output.
 ```
 import numpy as np
 import random
@@ -21,7 +21,7 @@ def loss(X, y, w, lr):
 > - You are provided with x (age of the fish), y (length of the fish) and test (age for which length is unknown). x and y are numpy arrays of shape 78 x 1 and test is a numpy array of size 1 X 1.
 > - You have to apply second degree polynomial transformation on x.
 > - Using only numpy, implement a linear regression model by stochastic gradient descent procedure on the transformed data with 300 iterations, initial weights as zero and learning rate as 0.001. <BR>
-
+>
 > What is the length of a test bluegill fish that is randomly selected based on its age? <BR>
 > - Define a function named `output` which accepts $x$, $y$, test as inputs and returns new predicted length (float) as output.
 ```
