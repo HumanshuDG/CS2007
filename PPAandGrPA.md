@@ -358,3 +358,575 @@ def is_linearly_separable(x,y):
 			state = True
 	return state
 ```
+
+
+<H1 ALIGN=CENTER> Week - 5 </H1>
+
+### PPA - 1
+> Define a function `cross_entropy(y, sigmoid_vector, w, reg_type, reg_rate)` having the following characteristics:
+> 
+> Input:
+> - y: Actual output label vector
+> - sigmoid_vector: logistic value of predicted output 
+> - w: weight vector
+> - reg_type: type of regularization as string, either 'l1' or 'l2'. Default 'l2'.
+> - reg_rate: regularization rate. Default value 0.
+> 
+> Output:
+> - Binary cross entropy loss(float value)
+```
+import numpy as np
+def cross_entropy(y, sigmoid_vector, w, reg_type = "l2", reg_rate = 0):
+    if reg_type == 'l1':
+        loss = (-1 * np.sum(y * np.log(sigmoid_vector) + (1 - y) * np.log(1 - sigmoid_vector))) + reg_rate * np.sum(np.abs(w))
+    else:
+        loss = (-1 * np.sum(y * np.log(sigmoid_vector) + (1 - y) * np.log(1 - sigmoid_vector))) + reg_rate * (np.transpose(w) @ w)
+    return loss
+```
+
+### PPA - 2
+> Write a function `sigmoid(X)` which returns logistic function of `X`, where `X` is a numpy array.
+> 
+> Input:
+> - A numpy array `X`.
+> 
+> Output:
+> - Logistic function of `X`.
+```
+import numpy as np
+def sigmoid(X):
+    return 1 / (1 + np.exp(-X))
+```
+
+### GrPA - 1
+> Assume that we have trained a logistic regression classifier on a dataset and have learned the weight `w`. Define a function `predict_label(X, w)` which accepts a feature matrix `X` of test samples and the weight vector `w` as arguments, and assigns labels to each of the samples based on the following conditions:
+> - If the model's output is greater than or equal to 0.75, assign the predicted label as ` 1 `.
+> - If the model's output is less than or equal to 0.25, assign the predicted label as ` -1 `.
+> - Otherwise, assign the label as ` 0 `
+> 
+> The function should return the vector of predicted labels.
+> 
+> Use the sigmoid activation function while calculating the model's output for all the sample values in the test-set.
+```
+import numpy as np
+def predict_label(X, w):
+    z = X @ w
+    sig = 1 / (1 + np.exp(-z))
+    labels = (sig >= 0.25).astype(int)
+    return labels
+```
+
+### GrPA - 2
+> Define a function `gradient(X, y, w, reg_rate)` which can be used for optimization of logistic regression model with L2 regularization having the following characteristics:
+> 
+> Input:
+> - `X`: Feature matrix for training data.
+> - `y`: Label vector for training data.
+> - `reg_rate`: regularization rate
+> - `w`: weight_vector
+> 
+> Output:
+> - A vector of gradients.
+```
+import numpy as np
+def gradient(X, y, w, reg_rate):
+    z = X @ w
+    sig = 1 / (1 + np.exp(-z))
+    return np.transpose(X) @ (sig-y) + reg_rate * w
+```
+
+### GrPA - 3
+> Define a function `update_w(X, y, w, reg_rate, lr)` which can be used for optimization of logistic regression model with L2 regularization having following characteristics:
+> 
+> Input:
+> - `X`: Feature matrix for training data.
+> - `y`: Label vector for training data.
+> - `reg_rate`: regularization rate
+> - `w`: weight_vector
+> - `lr`: learning rate
+> 
+> Output:
+> - A vector of updated weights.
+> 
+> You need to perform exactly one update over the entire data.
+```
+import numpy as np
+def update_w(X, y, w, reg_rate, lr):
+    z = X @ w
+    sig = 1 / (1 + np.exp(-z))
+    G = np.transpose(X) @ (sig - y) + reg_rate * w
+    return w - lr * G
+```
+
+
+<H1 ALIGN=CENTER> Week - 6 </H1>
+
+### PPA - 1
+
+> Consider a training dataset $D = { \{ x^{(i)}, y^{(i)} \} }_{i = 1}^{100}$ for a binary classification problem, where the feature vector $x = (x_1, x_2)$ is a two-dimensional binary vector, i.e., each feature is binary. The class label $y$ is indexed using $1$ and $2$. A sample feature matrix and label vector is given below:
+> 
+> $X = \begin{bmatrix} 1 & 0 \\ 0 & 0 \\ 0 & 1 \\ 1 & 0 \end{bmatrix}, \hspace{5pt} y = \begin{bmatrix} 1\\ 2\\ 2\\ 2 \end{bmatrix}$
+> 
+> Assume that the features are conditionally independent given the class labels. Train a Bernoulli Naive-Bayes classifier for this data. Specifically, estimate the following parameter matrix:
+> 
+> $P = \begin{bmatrix} p_{11} & p_{12}\\ p_{21} & p_{22} \end{bmatrix}$
+> 
+> This matrix is to be understood as follows. For features $x_1$ and $x_2$:
+> 
+> $p_{ij} = P(x_i = 1\ |\ y = j)$
+> 
+> In $p_{ij}$, the first index stands for the feature and the second stands for the class-label.
+> 
+> <HR>
+> 
+> Write a function named `bernoulli_naive_bayes` that accepts a feature matrix `X` and a label vector `y` as arguments. It should return the parameter matrix `P`. Both the arguments and the return value are of type `np.ndarray`. You can assume that no smoothing is required.
+```
+import numpy as np
+def bernoulli_naive_bayes(X, y):
+    """
+    Estimate the parameter matrix
+    
+    Arguments:
+    	X: feature matrix, (100, 2), np.ndarray
+    	y: label vector, (100, ), np.ndarray
+    Return:
+    	P: parameter matrix, (2, 2), np.ndarray
+    """
+    n_samples,n_features = X.shape
+    classes = np.unique(y)
+    n_classes = len(classes)
+    w = np.zeros((n_features,n_classes),dtype=np.float64)
+    for idx, c in enumerate(classes):
+        X_c = X[y==c]
+        w[idx,:] = np.sum(X_c,axis = 0)/X_c.shape[0]
+    return w.T
+```
+
+### PPA - 2
+> You are given a numerical data matrix $x$ as an `np.ndarray` shape $(200 \times 5)$ and a vector of class labels $y$ size $(200)$ as `np.ndarray` for a multi-class classification problem. Define a function `mean_estimate` which calculates the estimated mean of data samples corresponding to the class labels for each feature and returns a dictionary with class labels as keys and estimated mean vectors as values. The $i^{th}$ element of a mean vector corresponds to the $i^{th}$ feature.
+```
+import numpy as np
+def mean_estimate(X: np.ndarray,  y : np.ndarray):
+    """
+    Estimate the mean of samples for each class
+
+    Arguments:
+        X: samples, (200, 5), np.ndarray
+        y: labels, (200, ), np.ndarray
+    Return:
+        D: dictionary
+            key: label, int
+            value: mean, np.ndarray
+    """
+    n_samples, n_features = X.shape
+    class_count = np.unique(y)
+    n_classes = len(class_count)
+    mean_est = {}
+    for idx, c in enumerate(class_count):
+        X_c = X[y==c]
+        mean_est[c] = X_c.mean(axis = 0)
+    return mean_est
+```
+
+### PPA - 3
+> Write a function naive_gaussian_predict that implements a Gaussian Naive Bayes model on training data, and returns the predicted class labels for the test data. This is a binary classification task (labels are $0$ and $1$) and the size of `X_train`, `y_train` and `X_test` are fixed to $(800 \times 2)$, $(800, )$ and $(200 \times 2)$ respectively. The function signature is as follows:
+> 
+> Arguments:
+> - `X_train`: train samples, $(800, 2)$, np.ndarray 
+> - `y_train`: train labels,  $(800, )$, np.ndarray 
+> - `X_test`:  test samples, $(200, 2)$, np.ndarray
+> 
+> Return:  
+> - y_pred: test labels, $(200, )$ np.ndarray
+```
+import numpy as np
+def fit(X,y):
+    n_samples, n_features = X.shape
+    classes = np.unique(y)
+    n_classes = len(classes)
+    mean = np.zeros((n_classes, n_features), dtype = np.float64)
+    var = np.zeros((n_classes, n_features), dtype = np.float64)
+    priors = np.zeros(n_classes, dtype=np.float64)
+    classes = np.unique(y)
+
+    for idx, c in enumerate(classes):
+      X_c = X[y==c]
+      mean[idx, :] = X_c.mean(axis = 0)
+      var[idx,:] = X_c.var(axis = 0)
+      priors[idx] = X_c.shape[0]/ float(n_samples)
+    
+    return (mean,var,priors,classes)
+
+def calc_pdf(class_idx,X,mean,var):
+    mean = mean[class_idx]
+    var = np.diag(var[class_idx])
+    z = np.power(2*np.pi,X.shape[0]/2) * np.power(np.linalg.det(var),1/2)
+    return (1/z) * np.exp(-(1/2)*(X-mean).T @ (np.linalg.inv(var)) @(X-mean))
+
+def calc_prod_likelihood_prior(X,classes,priors,mean,var):
+    prod_likelihood_prior = np.zeros((X.shape[0], len(classes)),dtype = np.float64)
+    for x_idx, x in enumerate(X):
+      for idx, c in enumerate(classes):
+        prod_likelihood_prior[x_idx, c] = (np.log(calc_pdf(idx,x,mean,var)) + np.log(priors[idx]))
+    
+    return prod_likelihood_prior
+
+    
+def naive_gaussian_predict(X_train, y_train, X_test):
+    """
+    Train a Gaussian NB and predict the labels on test set 
+
+    Arguments:
+        X_train: train samples, (800, 2), np.ndarray 
+        y_train: train labels,  (800, ), np.ndarray 
+        X_test:  test samples, (200, 2), np.ndarray
+    Return  
+        y_pred: test labels, (200, ) np.ndarray
+    """
+    mean,var,priors,classes = fit(X_train,y_train)
+    likelihood_prior = calc_prod_likelihood_prior(X_test,classes,priors,mean,var)
+    return np.argmax(likelihood_prior, axis = 1)
+```
+
+### PPA - 4
+> For a binary classification problem with class labels ($0$ and $1$), define a function `class_scores` that accepts the true and predicted labels and returns the following evaluation metrics as a dictionary.  
+> 1. Precision  
+> 2. Recall  
+> 3. Accuracy  
+> 4. F1 score  
+> 5. Misclassification Rate
+> 
+> They keys of the dictionary are the names of the metrics, exactly as they are given above. The values are the corresponding measurements expressed as floats. The function should have the following signature:
+> 
+> Arguments:  
+> - `y_test`: true labels, $(n, )$, np.ndarray 
+> - `y_pred`: predicted labels, $(n, )$, np.ndarray
+> 
+> Return:
+> - metrics: dictionary
+> - key: string, names of the metrics
+> - value: float
+> 
+> Both `numpy` arrays are of size $(n, )$. Do not use any existing methods/functions to calculate the same. Consider label 1 as the positive class. Note that the misclassification rate is 1 minus the accuracy.
+```
+import numpy as np
+def class_scores(y_test: np.ndarray, y_pred: np.ndarray):
+    """
+    Compute evaluation metrics for a binary classification task
+    
+    Arguments:  
+        y_test: true labels, (n, ), np.ndarray 
+        y_pred: predicted labels, (n, ), np.ndarray
+    Return:
+        metrics: dictionary
+            key: string, names of the metrics
+            value: float
+    """
+    TP = np.where((y_pred== 1) & (y_test == 1),1,0).sum()
+    TN = np.where((y_pred== 0) & (y_test == 0),1,0).sum()
+    FP = np.where((y_pred== 1) & (y_test == 0),1,0).sum()
+    FN = np.where((y_pred== 0) & (y_test == 1),1,0).sum()
+    
+    classification_report = {}
+    
+    classification_report["Precision"] = float(TP/(TP+FP))
+    classification_report["Recall"] = float(TP/(TP+FN))
+    classification_report["Recall"] = float(TP/(TP+FN))
+    classification_report["Accurancy"] = float((TP+TN)/(TP+TN+FP+FN))
+    classification_report["F1 Score"] = float((2*float(TP/(TP+FP))*float(TP/(TP+FN)))/(float(TP/(TP+FP))+float(TP/(TP+FN))))
+    classification_report["Misclassification Rate"] = (1-float((TP+TN)/(TP+TN+FP+FN)))
+    
+    return classification_report
+```
+
+### GrPA - 1
+> In a multi-class classification setting, consider a numerical feature matrix $X$ as an  np.ndarray  of shape $(n, m)$ and a vector of class labels  $y$  of size $(n, )$ as an  np.ndarray. Define a function `variance_estimate` which calculates the estimated variance of data samples corresponding to individual class labels for each feature. The function should return a dictionary with class labels as keys and estimated variance vectors as values. The $i^{th}$ element of a vector corresponds to the variance of the $i^{th}$ feature.
+```
+import numpy as np
+def variance_estimate(X: np.ndarray, y: np.ndarray):
+    class_count = np.unique(y)
+    class_dic = {}
+    for c in (class_count):
+        X_c = X[y == c]
+        class_dic[c] = X_c.var(axis = 0)
+    return class_dic
+```
+
+### GrPA - 2
+> Write a function `naive_gmodel_eval` that implements a Gaussian Naive Bayes model on training data, predicts class labels for the test data and returns the evaluation scores for the predictions performed on the test data, corresponding to  **each individual label**  appearing on `y_test`. This is a multiclass classification task and the size of  `X_train`, `y_train`, `X_test` and `y_test`  are fixed to  $(1800, 5)$, $(1800, )$, $(200,5)$ and $(200,)$  respectively. There are four classes labeled as  $0, 1, 2, 3$.
+> 
+> ----------
+> 
+> For each label, the following evaluation metrics have to be generated by treating that label as a positive class and all others as the negative class.  
+> 1. Precision
+> 2. Recall
+> 3. Accuracy
+> 4. F1 score
+> 5. Misclassification Rate
+> 
+> This information has to be stored in a dictionary. They keys of the dictionary are the names of the metrics, exactly as they are given above. The values are the corresponding measurements expressed as floats.  
+> 
+> ----------
+> 
+> Create a parent dictionary named `metrics`. The keys of this dictionary will be the labels and the values will be the corresponding evaluation dictionaries. So, your function should return  metrics, which is essentially a dictionary of dictionaries!
+> 
+> ----------
+> 
+> The function will have the following signature:
+> 
+> Arguments:
+> - X_train: training samples, (1800, 5), np.ndarray
+> - y_train: training labels, (1800, ), np.ndarray, labels are 0, 1, 2 or 3
+> - X_test:  test samples, (200, 5), np.ndarray
+> - y_test:  test_labels, (200, ), np.ndarray, labels are 0, 1, 2, or 3
+> 
+> Return:
+> - metrics: dict of dicts
+> - key: label, int
+> - value: dict
+> - key: string
+> - value: float
+```
+import numpy as np
+def fit(X, y):
+    n_samples, n_features = X.shape
+    class_count = np.unique(y)
+    n_classes = len(class_count)
+    mean = np.zeros((n_classes, n_features), dtype = np.float64)
+    var = np.zeros((n_classes, n_features), dtype = np.float64)
+    prior = np.zeros((n_classes), dtype = np.float64)
+    for idx, c in enumerate(class_count):
+        X_c = X[y == c]
+        mean[idx,:] = X_c.mean(axis = 0)
+        var[idx,:] = X_c.var(axis = 0)
+        prior[idx] = X_c.shape[0] / float(n_samples)
+    return (mean, var, prior, class_count)
+
+def calc_pdf(idx, X, mean, var):
+    mean = mean[idx]
+    varx = np.diag(var[idx])
+    z = np.power(2 * np.pi, X.shape[0] / 2) * np.power(np.linalg.det(varx), 0.5)
+    return ((1 / z) * np.exp((-1 / 2) * (X - mean).T @ np.linalg.inv(varx) @ (X - mean)))
+
+def log_likelihood_prior(X, classes, mean, var, prior):
+    prod_likelihood_prior = np.zeros((X.shape[0], len(classes)), dtype = np.float64)
+    for x_idx, x in enumerate(X):
+        for idx, c in enumerate(classes):
+            prod_likelihood_prior[x_idx, c] = np.log(calc_pdf(idx, x, mean, var)) + np.log(prior[idx])
+    return prod_likelihood_prior
+
+def predict(X):
+    return np.argmax(X, axis = 1)
+
+def naive_gmodel_eval(X_train, y_train, X_test, y_test):
+    (mean, var, prior, class_count) = fit(X_train, y_train)
+    Prod_Log_like = log_likelihood_prior(X_test, class_count, mean, var, prior)
+    y_pred = np.argmax(Prod_Log_like, axis = 1)
+    metrics = {}
+    for c in class_count:
+        TP = np.where((y_pred == c) & (y_test == c), 1, 0).sum()
+        TN = np.where((y_pred != 0) & (y_test != c), 1, 0).sum()
+        FP = np.where((y_pred == c) & (y_test != c), 1, 0).sum()
+        FN = np.where((y_pred != c) & (y_test == c), 1, 0).sum()
+        metrics[c] = {}
+        metrics[c]["Precision"] = float(TP / (TP + FP))
+        metrics[c]["Recall"] = float(TP / (TP + FN))
+        metrics[c]["Accurancy"] = float((TP + TN) / (TP + TN + FP + FN))
+        metrics[c]["F1 Score"] = float((2 * float(TP / (TP + FP)) * float(TP / (TP + FN))) / (float(TP / (TP + FP)) + float(TP / (TP + FN))))
+        metrics[c]["Misclassification Rate"] = (1 - float((TP + TN) / (TP + TN + FP + FN)))
+    return metrics
+```
+
+<H1 ALIGN=CENTER> Week - 7 </H1>
+
+### PPA - 1
+> 
+```
+
+```
+
+### PPA - 2
+> 
+```
+
+```
+
+### PPA - 3
+> 
+```
+
+```
+
+### GrPA - 1
+> 
+```
+
+```
+
+### GrPA - 2
+> 
+```
+
+```
+
+### GrPA - 3
+> 
+```
+
+```
+
+
+<H1 ALIGN=CENTER> Week - 8 </H1>
+
+### PPA - 1
+> 
+```
+
+```
+
+### PPA - 2
+> 
+```
+
+```
+
+### PPA - 3
+> 
+```
+
+```
+
+### GrPA - 1
+> 
+```
+
+```
+
+### GrPA - 2
+> 
+```
+
+```
+
+### GrPA - 3
+> 
+```
+
+```
+
+
+<H1 ALIGN=CENTER> Week - 9 </H1>
+
+### PPA - 1
+> 
+```
+
+```
+
+### PPA - 2
+> 
+```
+
+```
+
+### PPA - 3
+> 
+```
+
+```
+
+### GrPA - 1
+> 
+```
+
+```
+
+### GrPA - 2
+> 
+```
+
+```
+
+### GrPA - 3
+> 
+```
+
+```
+
+
+<H1 ALIGN=CENTER> Week - 10 </H1>
+
+### PPA - 1
+> 
+```
+
+```
+
+### PPA - 2
+> 
+```
+
+```
+
+### PPA - 3
+> 
+```
+
+```
+
+### GrPA - 1
+> 
+```
+
+```
+
+### GrPA - 2
+> 
+```
+
+```
+
+### GrPA - 3
+> 
+```
+
+```
+
+
+<H1 ALIGN=CENTER> Week - 11 </H1>
+
+### PPA - 1
+> 
+```
+
+```
+
+### PPA - 2
+> 
+```
+
+```
+
+### PPA - 3
+> 
+```
+
+```
+
+### GrPA - 1
+> 
+```
+
+```
+
+### GrPA - 2
+> 
+```
+
+```
+
+### GrPA - 3
+> 
+```
+
+```
