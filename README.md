@@ -1,2 +1,2 @@
-# MachineLearningTechniques
-CS2007
+> CS2007
+# Machine Learning Techniques
