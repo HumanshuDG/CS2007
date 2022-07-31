@@ -740,117 +740,443 @@ def naive_gmodel_eval(X_train, y_train, X_test, y_test):
 <H1 ALIGN=CENTER> Week - 7 </H1>
 
 ### PPA - 1
+> Write a function `euclid(a, b)` to find Euclidean distance between vectors `a` and `b`. Both `a` and `b` have shape $(n, 1)$, where $n$ is number of features/dimensions.
 > 
+> Input:
+> - Vectors `a` and `b`.
+> 
+> Output:
+> - Euclidean distance between vectors `a` and `b`.
 ```
-
+import numpy as np
+def euclid(a, b):
+    return np.sum((a - b) ** 2, axis = 1)
 ```
 
 ### PPA - 2
+> Write a function `one_hot(y)` which performs one hot encoding on vector `y` and then outputs a resultant matrix which can be used for softmax regression as output label matrix. `y` is row matrix with $(n, 1)$ shape, where n is number of samples.
 > 
-```
-
-```
-
-### PPA - 3
+> Example:
+> If $y$ is $[8, 6, 3]$, its one hot encoding will be $\begin{bmatrix} 0 & 0 & 1 \\ 0 & 1 & 0 \\ 1 & 0 & 0 \end{bmatrix}$.
+> Input:
+> - `y`: A vector of shape $(n, 1)$
 > 
+> Output:
+> - A output label matrix of suitable shape.
 ```
-
+import numpy as np
+def one_hot(y):
+    encoded = np.zeros((y.size, y.max() + 1))
+    encoded[np.arange(y.size), y] = 1.0
+    return encoded
 ```
 
 ### GrPA - 1
+> Write a function `manhattan(a, b)` to find Manhattan distance between vectors `a` and `b`. Both `a` and `b` are vectors with shape $(n, 1)$ where $n$ is number of features/dimensions.
 > 
+> Input:
+> - Vectors `a` and `b`.
+> 
+> Output:
+> - Manhattan distance between vectors `a` and `b`.
 ```
-
+import numpy as np
+def manhattan(a,b):
+	M=np.sum(np.abs(a-b),axis=0)
+	return M
 ```
 
 ### GrPA - 2
+> Write a function softmax(Z) to find softmax of linear combination of feature matrix and weight vector. Take care of numerical stability as well.
 > 
+> Input: Z = X@W, where X is feature matrix of shape (n,m), W is weight matrix (m,k), where n = number of rows, m = number of features and k = number of labels.
+> 
+> Output: A matrix of (n,1) shape. Each row corresponds to the label of that row. Each label will have value from 0 to k-1.
 ```
-
+import numpy as np
+def softmax(Z):
+	m = 1/(1+np.exp(-1))
+	return np.round(m)
 ```
 
 ### GrPA - 3
+> Write a function knn(class1, class2, x_new) to find in which cluster x_new belongs using 3-NN. Assume cluster 1 and cluster 2 has 5 points each. Use Euclidian distance as distance measure.
 > 
+> Input:
+> - Two numpy arrays class1 and class2 of shape (5,2) each and a numpy array x_new of shape (2,1)
+> 
+> Output:
+> - Return class id to which x_new belongs (i.e. 1 or 2).
 ```
-
+import numpy as np
+from scipy import stats
+def knn(class1,class2,x_new):
+    x_new=x_new.reshape((1,2))
+    x=np.array(list(class1)+list(class2))
+    y=np.zeros((10,1))
+    y[[0,1,2,3,4]]=1
+    y[[5,6,7,8,9]]=2
+    # dis_vec= np.sum((x-x_new)**2,axis=1)
+    dis_vec=[]
+    for i in x:
+        dis_vec.append(np.sum((i-x_new)**2))
+    dis_vec=np.array(dis_vec)
+    k_labels=np.argpartition(dis_vec,3)[:3]
+    cluster= stats.mode(y[k_labels])[0]
+    return cluster
 ```
 
 
 <H1 ALIGN=CENTER> Week - 8 </H1>
 
 ### PPA - 1
-> 
-```
+> Write a function named `hinge_loss` that computes the hinge loss value for corresponding elements of two vectors namely `y_test` $(5 \times 1)$ and `y_pred` $(5 \times 1)$ and returns the mean of the loss values computed.
 
+Note:
+`y_test` is the true test label and `y_pred` is the the predicted label.
+```
+import numpy as np
+def hinge_loss(y_pred, y_test):
+    return np.mean([max(0, 1 - x * y) for x, y in zip(y_test, y_pred)])
 ```
 
 ### PPA - 2
-> 
+> Write a function `solve_eqn` to obtain the weight vector (bias as its last element) of linear SVM model by accepting an array of support vectors A of shape $(3 \times 2)$ and their label vector `b` of shape $(3 \times 1)$. This function should return weight vector of shape $(3 \times 1)$.
 ```
-
+import numpy as np
+def solve_eqn(A, b):
+    A = np.column_stack((A, np.ones(A.shape[0])))
+    S = [[i @ j for j in A] for i in A]
+    x = np.linalg.solve(S, b)
+    w = np.zeros_like(x)
+    for i in range(len(x)):
+        w += x[i] * A[i]
+    return w
 ```
 
 ### PPA - 3
+> Write a class named `fit_softsvm` that implements soft margin SVM using GD. 
+> Write a separate function named `support_vectors` and return the `support_vectors` identified by the model. 
+> The inputs to the `support_vectors` function should be feature matrix `X_train` and label vector `y_train`.
 > 
+> Use the following parameters:
+> 1.   learning rate = 0.001
+> 2.   C = 500
+> 3.   epochs = 100
 ```
-
+import numpy as np
+class fit_softSVM:
+  def __init__(self,C):
+    self._support_vectors = None
+    self.C = C
+    self.w = None
+    self.b = None
+    self.X = None
+    self.y = None
+    #n is the number of data points
+    self.n = 0
+    #d is the number of dimensions
+    self.d = 0
+  def __decision_function(self,X):
+    return X.dot(self.w) + self.b
+  def __cost(self,margin):
+    return (1/2)*self.w.dot(self.w) + self.C * np.sum(np.maximum(0,1-margin))
+  def __margin(self,X,y):
+    return y*self.__decision_function(X)
+  def fit(self,X,y,lr=1e-3,epochs=500):
+    # Initialize w and b
+    self.n, self.d = X.shape
+    self.w = np.random.randn(self.d)
+    self.b = 0
+    #Required only for plotting
+    self.X = X
+    self.y = y
+    loss_array = []
+    for _ in range(epochs):
+      margin = self.__margin(X,y)
+      loss = self.__cost(margin)
+      loss_array.append(loss)
+      misclassified_pts_idx = np.where(margin<1)[0]
+      d_w = self.w - self.C * y[misclassified_pts_idx].dot(X[misclassified_pts_idx])
+      self.w = self.w - lr*d_w
+      d_b = -self.C*np.sum(y[misclassified_pts_idx])
+      self.b = self.b - lr * d_b 
+    self._support_vectors = np.where(self.__margin(X,y)<=1)[0]
+  def predict(self,X):
+    return np.sign(self.__decision_function(X))
+  def score(self,X,y):
+    P = self.predict(X)
+    return np.mean(y==P)
+# Main function
+def support_vectors(X_train, y_train):
+      svm = fit_softSVM(C=500)
+      svm.fit(X_train,y_train)
+      return svm._support_vectors
 ```
 
 ### GrPA - 1
+> Write a function named `hinge_loss` that computes the hinge loss value for two vectors namely `y_test` $(20 \times 1)$ and `y_pred` $(20 \times 1)$ , and returns the mean of the loss values computed.
 > 
+> Note:
+> `y_test` is the true test label and `y_pred` is the the predicted label.
 ```
-
+import numpy as np
+def hinge_loss(y_pred, y_test):
+    return np.sum(y_pred != y_test)
 ```
 
 ### GrPA - 2
+> Write a function `fit` to compute gradient of the hinge loss function without regularization. This fit function should have the following input arguments-
 > 
+> - `X_train`: feature matrix for training
+> - `Y_train`: labels for training
+> - `X_test`: features for testing
+> - `Y_test`: labels for testing
+> - `n_iters`: Number of iterations with default value 100
+> - `lr`: learning rate with default value 0.1
+> 
+> The function should return the accuracy using the testing data.
 ```
+import numpy as np
 
+def decision_function(X,w,b):
+    return X.dot(w) + b
+    
+def cost(w,C, margin):
+    return (1 / 2) * w.dot(w) + C * np.sum(np.maximum(0, 1 - margin))
+
+def margin(X, y, w, b):
+    return y * decision_function(X, w, b)
+
+def fit(X_train, Y_train, X_test, Y_test, n_iters = 100, lr = 0.1):
+    n, d = X_train.shape
+    w = np.random.rand(d)
+    b, C = 0, 1
+    X, y = X_train, Y_train
+    loss_array = []
+    for _ in range(n_iters):
+        Margin = margin(X, y, w, b)
+        loss = cost(w, C, Margin)
+        loss_array.append(loss)
+        misclassified_pts_idx = np.where(Margin < 1)[0]
+        d_w = w - C * y[misclassified_pts_idx].dot(X[misclassified_pts_idx])
+        w = w - lr * d_w
+        d_b =- C * np.sum(y[misclassified_pts_idx])
+        b = b - lr * d_b
+    support_vectors = np.where(margin(X, y, w, b) <= 1)[0]
+    y_hat = np.sign(decision_function(X_test, w, b))
+    accuracy = np.mean(Y_test == y_hat)
+    return accuracy
 ```
 
 ### GrPA - 3
+> Write a class named `fit_softsvm` that implements soft margin SVM using GD.
+> Write a separate function named `compute_accuracy` and return the accuracy value using a `pred_accuracy` function which is defined inside the `fit_svm` class.
 > 
+> The inputs to the `compute_accuracy` function should be feature matrices `X_train`, `X_test` and label vectors `y_train`, `y_test`.
+> 
+> Use the following parameters:
+> 1. learning rate = 0.01
+> 2. C = 15
+> 3. epochs = 100
 ```
+import numpy as np
+class fit_softSVM:
+    def __init__(self, C=15):
+        self._support_vectors = None
+        self.C = C
+        self.w, self.b, self.X, self.y = None, None, None, None
+        #number of data points
+        self.n = 0
+        #number of dimensions
+        self.d = 0
 
+    def __decision_function(self, X):
+        return X.dot(self.w) + self.b
+ 
+    def __cost(self, margin):
+        return (1 / 2) * self.w.dot(self.w) + self.C * np.sum(np.maximum(0, 1 - margin))
+ 
+    def __margin(self, X, y):
+        return y * self.__decision_function(X)
+ 
+    def fit(self, X, y, lr = 0.01, epochs = 100):
+        self.n, self.d = X.shape
+        self.w = np.random.rand(self.d)
+        self.b = 0
+        self.X = X
+        self.y = y
+        loss_array = []
+
+        for _ in range(epochs):
+            margin = self.__margin(X, y)
+            loss = self.__cost(margin)
+            loss_array.append(loss)
+            misclassified_pts_idx = np.where(margin < 1)[0]
+            d_w = self.w - self.C * y[misclassified_pts_idx].dot(X[misclassified_pts_idx])
+            self.w = self.w - lr * d_w
+            d_b = - self.C* np.sum(y[misclassified_pts_idx])
+            self.b = self.b - lr * d_b
+
+        self._support_vectors = np.where(self.__margin(X,y) <= 1)[0]
+ 
+    def predict(self, X):
+        return np.sign(self.__decision_function(X))
+
+    def score(self, X, y):
+        P = self.predict(X)
+        return np.mean(y == P)
+
+def compute_accuracy(X_train, y_train, X_test,  y_test):
+      svm = fit_softSVM(C = 15)
+      svm.fit(X_train, y_train)
+      return svm.score(X_test, y_test)
 ```
 
 
 <H1 ALIGN=CENTER> Week - 9 </H1>
 
 ### PPA - 1
+> Consider a regression problem with feature matrix $X$ with size $(100 \times 10)$ and label vector y with size $(100 \times 1)$. We split this root node into two nodes `node1` and `node2` according to $j^{th}$ split variable and split value `s`.
 > 
+> Define a function `predict_node(X, y, j, s)` that takes `X`, `y`, split variable `j` and split value `s` as parameters and returns the tuple of predict values (mean value) at both the nodes.
+> 
+> - X = ndarray of size (100, 10) with entries as float.
+> - y = ndarray of size (100, 1) with entries as float.
+> - j = int
+> - s = float
 ```
-
+import numpy as np
+def predict_node(X, y, j, s):
+    node1 =[]
+    node2 =[]
+    for i in range((X.shape[0])):
+        if X[i][j]<=s:
+            node1.append(y[i])
+        else:
+            node2.append(y[i])
+    m1= sum(node1)/len(node1)
+    m2= sum(node2)/len(node2)
+    return ((m1[0], m2[0]))
 ```
 
 ### PPA - 2
+> Define a function `predict_class(y)` that takes the parameter
 > 
+> `y` which is a ndarray of actual outputs of all the samples in a particular node and retruns the predict class for the same node.
+> 
+> Note:
+> - number of classes are $10$ $(0$ $to$ $9)$.
+> - If two classes have same number of samples, function should return the lower class.
 ```
-
+import numpy as np
+def predict_class(y):
+    idx={}
+    for i in y:
+        if not i in idx:
+            idx[i]=1
+        else:
+            idx[i]+=1
+    key= list(idx.keys())
+    val= list(idx.values())
+    for i in range(len(val)-1):
+        index=i
+        for j in range(i+1, len(val)):
+            if val[j]<val[index]:
+                index=j
+            elif val[j]==val[index]:
+                if key[j]<key[index]:
+                    index=j
+        val[i], val[index]= val[index], val[i]
+        key[i], key[index]= key[index], key[i]
+    max1= val[-1]
+    index= key[-1]
+    for i in range(len(val)-2,-1,-1):
+        if val[i]==max1:
+            index= key[i]
+        else:
+            break
+    return index
 ```
 
 ### PPA - 3
-> 
+> Define a function `misclassification_error(y)` that takes the parameter `y` which is a ndarray of actual outputs of all the samples in a particular node and return the misclassification error of the same node.
 ```
-
+import numpy as np
+import random
+def misclassification_error(y):
+    idx={}
+    for i in y:
+        if not i in idx:
+            idx[i]=1
+        else:
+            idx[i]+=1
+    key= list(idx.keys())
+    val= list(idx.values())
+    for i in range(len(val)-1):
+        index=i
+        for j in range(i+1, len(val)):
+            if val[j]>val[index]:
+                index=j
+            
+        val[i], val[index]= val[index], val[i]
+        key[i], key[index]= key[index], key[i]
+    max_class=key[0]
+    mis_count=0
+    for i in y:
+        if i != max_class:
+            mis_count += 1
+    return (mis_count/len(y))
 ```
 
 ### GrPA - 1
+> Define a function `gini_index(dict)` having the following characteristics:
 > 
+> Input:
+> - `dict` = dictionary that has classes as keys and 'number of samples in respective class' as values of a particular node.
+> 
+> Output:
+> - Gini index of the same node (a float value).
 ```
-
+import numpy as np
+def gini_index(dict):
+    classes = dict.keys()
+    total_samples = sum(dict.values())
+    Gini = 0
+    for k in classes:
+        p = dict[k] / total_samples
+        Gini += p * (1-p)
+    return Gini
 ```
 
 ### GrPA - 2
+> Define a function `entropy(dict)` having the following characteristics:
 > 
+> Input:
+> - `dict` = dictionary that has classes as keys and 'number of samples in respective class' as values of a particular node.
+> 
+> Output:
+> - Entropy of the same node. (A float value)
 ```
-
+import numpy as np
+def entropy(dict):
+    classes = dict.keys()
+    samples = sum(dict.values())
+    Entropy = 0
+    for k in classes:
+        p = dict[k] / samples
+        Entropy += (-p * np.log2(p))
+    return Entropy
 ```
 
 ### GrPA - 3
-> 
+> Consider a regression problem using CART. If `y` is a ndarray of targets of the samples in a particular node, define a function `sseloss(y)` that returns the error associated with that node.
 ```
-
+import numpy as np
+def sseloss(y):
+    y_mean = np.mean(y)
+    error = np.sum((y - y_mean) ** 2, axis = 0)
+    return error
 ```
 
 
