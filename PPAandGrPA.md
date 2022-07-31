@@ -1183,76 +1183,232 @@ def sseloss(y):
 <H1 ALIGN=CENTER> Week - 10 </H1>
 
 ### PPA - 1
+> Write a function `similarity(res, lambda_)` which takes residuals at a node as input and returns similarity score which can be used for XGBoost regression.  
 > 
+> Input:
+> - A numpy array having residuals at a node.
+> - lambda is the regularization rate.
+> 
+> Output:
+> - Similarity score of the node.  
+> 
+> Note:
+> Similarity Score = (Sum of residuals) 2 / (No. of residuals + lambda_)
 ```
-
+import numpy as np
+def similarity(res,lambda_):
+    num = res.shape[0]
+    SS = (np.sum(res))**2/(num+lambda_)
+    return SS
 ```
 
 ### PPA - 2
+> Write a function `gradboost(model,X_train, y_train, X_test, boosting_rounds, learning_rate)` to implement Gradient boost algorithm.  
 > 
-```
-
-```
-
-### PPA - 3
+> Input:  
+> - `model`: model to be fitted
+> - `X_train`: Training features
+> - `y_train`: Training output labels
+> - `X_test`: Test feature values
+> - `boosting_rounds`: number of boosting rounds
+> - `learning_rate`: learning rate used in the algorithm
 > 
+> Output:  
+> - `y_hat_train`: Prediction on training data after number of boosting rounds  
+> - `y_hat_test`: Prediction on testing data after number of boosting rounds
 ```
-
+import numpy as np
+import pandas as pd
+def gradboost(model, X_train, y_train, X_test, boosting_rounds, learning_rate):
+    y_hat_train= np.repeat(np.mean(y_train), len(y_train))
+    y_hat_test= np.repeat(np.mean(y_train), len(X_test))
+    res= y_train-y_hat_train
+    
+    for i in range(0, boosting_rounds):
+        model= model.fit(X_train,res)
+        y_hat_train = y_hat_train+ learning_rate* model.predict(X_train)
+        y_hat_test = y_hat_test+ learning_rate* model.predict(X_test)
+        res= y_train-y_hat_train
+    return y_hat_train, y_hat_test
 ```
 
 ### GrPA - 1
+> Write a function `residual(y)` which takes a numpy array `y` as input and calculates residuals for base model (taking mean of the target values).
 > 
+> Input:
+> - numpy array `y` having all the target values.  
+> 
+> Output:
+> - numpy array containing residuals.
 ```
-
+import numpy as np
+def residual(y):
+    y_hat = np.repeat(np.mean(y), len(y))
+    res= y - y_hat
+    return res
 ```
 
 ### GrPA - 2
+> Write a function `accuracy(y_true, y_pred)` which calculates accuracy of classification based on inputs `y_true` and `y_pred`.
 > 
+> Input:
+> - `y_true`: vector of true output labels
+> - `y_pred`: vector of predicted output labels.  
+> 
+> Output:
+> - accuracy of classification
 ```
-
+import numpy as np
+def accuracy(y_true,y_pred):
+    acc= np.sum(y_true==y_pred)/len(y_true)
+    return acc
 ```
 
 ### GrPA - 3
+> Write a function `bag(X, y)` for creating q bootstrap from original dataset.
 > 
+> Input:
+> - `X` is the feature matrix and `y` is the output label vector  
+> 
+> Output:
+> - Bootstrap containing two numpy arrays containing feature values and corresponding target values.
 ```
-
+import numpy as np
+def bag(X, y):
+    #D is no. of samples
+    D = X.shape[0]
+    np.random.seed(42)
+    indices = np.random.choice(range(D), D, replace = True)
+    return X[indices], y[indices]
 ```
 
 
 <H1 ALIGN=CENTER> Week - 11 </H1>
 
 ### PPA - 1
+> Write a function euclid(a,b) to find Euclidean distance between vectors a and b.
 > 
-```
-
-```
-
-### PPA - 2
+> Input:
+> - Vectors `a` and `b`.
 > 
-```
-
-```
-
-### PPA - 3
+> Return:
+> - Euclidean distance between vectors `a` and `b`
 > 
+> Note:
+> - Both vectors are of shape $(m, )$, where $m$ is some positive integer.
 ```
-
+import numpy as np
+def euclid(a, b):
+    return np.linalg.norm(a - b)
 ```
 
 ### GrPA - 1
+> Write a function `centroid(a, b)` to find centroid of vectors `a` and `b`.
 > 
+> Input:
+> - `a` and `b` are numpy arrays of same shape.
+> 
+> Output:
+> - centroid of `a` and `b` as numpy array.
 ```
-
+import numpy as np
+def centroid(a, b):
+    c=[]
+    count = a.shape[0]
+    for i in range(count):
+        c.append((a[i] + b[i]) / 2)
+    return np.array(c)
 ```
 
 ### GrPA - 2
+> Write a function `silhoutte(a, b)` to calculate silhoutte coefficient.  
 > 
-```
-
-```
-
-### GrPA - 3
+> Input:
+> - `a` is the mean distance between the instances in the cluster
+> - `b` is the mean distance between the instance and the instances in the next closest cluster.  
 > 
+> Output:
+> - Silhoutte coefficient
+```
+import random
+def silhoutte(a, b):
+    s = a * b / max(a, b)
+    return s
 ```
 
+
+<H1 ALIGN=CENTER> Week - 12 </H1>
+
+### PPA - 1
+> Write a function named `relu` that accepts a matrix $Z$ as argument and returns the result of the ReLU activation function applied on $Z$ element-wise.
+```
+import numpy as np
+def relu(Z):
+    Re = np.where(Z >= 0, Z, 0)
+    return Re
+```
+
+### PPA - 2
+> Write a function named `count_params` that accepts a list  layers  as argument. The first and last element of  layers  corresponds to the input and output neurons. The rest of the elements are the number of neurons in the hidden layers. The function should return the total number of parameters $(weights + biases)$ in the network.
+```
+import numpy as np
+def count_params(layers):
+    count = 0
+    for i in range(1, len(layers)):
+        weights = layers[i - 1] * layers[i]
+        bias = layers[i]
+        count += (weights + bias)
+    return count
+```
+
+### PPA - 3
+> Consider a multi-class classification setup with  $k$  classes. The labels are integers in the range  $[0, k - 1]$. $Z$ is a matrix of pre-activations of shape  $(n \times k)$ at the output layer of a neural network. $n$ is the batch-size here.
+> 
+> ----------
+> 
+> Write a function named `predict` that accepts the matrix $Z$ as argument. Within the function perform the following operations:
+> 1. apply the Softmax non-linear function row-wise on $Z$.
+> 2. compute the vector of labels of size $(n, )$ predicted by the network
+> 
+> The function should return this vector.
+```
+import numpy as np
+def softmax(Z):
+    expZ = np.exp(Z)
+    prob= expZ / expZ.sum(axis = 1, keepdims = True)
+    return prob
+def predict(Z):
+    y_hat = softmax(Z)
+    if Z.shape[-1] == 1:
+        return y_hat
+    else:
+        return np.argmax(y_hat, axis = 1)
+```
+
+### GrPA - 1
+> Write a function named `forward_layer` that accepts three arguments:
+> 1. `A`: input activations to layer $l$.
+> 2. `W`: weight matrix at layer $l$.
+> 3. `b`: bias vector at layer $l$.
+> 
+> Return the output activation matrix at layer $l$ using Sigmoid activation function.
+```
+import numpy as np
+def forward_layer(A, W, b):
+    Z = (A @ W) + b
+    A_out= 1 / (1 + np.exp(-Z))
+    return A_out
+```
+
+### GrPA - 2
+> $A^{(g)}$ or `grad_A` is the gradient of the loss with respect to the activations at a hidden layer in a neural network.  ${Z^{(g)}}$ or `grad_Z` is the gradient of the loss with respect to the pre-activations at this layer.  $Z$ or `Z` is a matrix of pre-activations at this layer. The activation function for this layer is ReLU.
+> 
+> Write a function named `grad_estimate` that accepts `grad_A` and `Z` as arguments and returns `grad_Z`.
+```
+import numpy as np
+def grad_relu(Z):
+    return np.where(Z >= 0, 1, 0)
+def grad_estimate(grad_A, Z):
+    grad_Z = grad_A * grad_relu(Z)
+    return grad_Z
 ```
